@@ -20,10 +20,12 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.data.web.PageableDefault
+import com.example.demo.GreetingService
 
 @RestController
 class HelloController(
-    private val repo: GreetingRepository
+    private val repo: GreetingRepository,
+    private val greetingService: GreetingService,
 ) {
 
     @GetMapping("/")
@@ -49,5 +51,10 @@ class HelloController(
         @PageableDefault(size = 5) pageable: Pageable
     ): Page<GreetingEntity> {
         return repo.customFindAll(pageable)
+    }
+
+    @GetMapping("/farewell/{name}")
+    fun farewell(@PathVariable name: String): String {
+        return greetingService.farewell(name)
     }
 }
